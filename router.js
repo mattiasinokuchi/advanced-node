@@ -11,6 +11,10 @@ const controller = require('./controller');
 
 // Define router
 router.get("/", controller.home);
+router.post('/login', passport.authenticate('local', { failureRedirect: '/' }), controller.login);
+router.get('/profile', ensureAuthenticated, controller.profile);
+router.get('/logout', controller.logout);
+router.post('/register', controller.register);
 
 // Make routes available from server.js
 module.exports = router;
