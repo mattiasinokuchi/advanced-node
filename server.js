@@ -50,6 +50,9 @@ app.use(session({
   cookie: { secure: false }
 }));
 
+// Import router object
+const router = require('./router')
+
 // Enable middlewares for authentication
 app.use(passport.initialize());
 app.use(passport.session());
