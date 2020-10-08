@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 // Export module for routes
 module.exports = function (app, myDataBase) {
-  
+
   // Route for requests to home page
   app.route('/').get((req, res) => {
     console.log('app.route("/")');
@@ -39,29 +39,24 @@ module.exports = function (app, myDataBase) {
   });
 
   // Route for request to register...
-  app.route('/register').post((req, res, next) => {
-    console.log('app.route.("/register") =>');
-    // ...salts and hashes the password...
-    const hash = bcrypt.hashSync(req.body.password, 12);
-    // ...search for the usernamn in the database...
-    myDataBase.findOne({ username: req.body.username }, function (err, user) {
-      if (err) {
-        next(err);
-      } else if (user) {
-        // ...redirects to home page if username is already present...
+  app.route('/register').post(async(req, res, next) => {
+    try {
+      //...salts and hashes the password...
+      const hash = bcrypt.hashSync(req.body.password, 12);
+      // ...searches for the username in the database...
+      const user = await myDataBase.findOne({ username: req.body.username });
+      if (user) {
+        // ...redirects back if username already is taken...
         res.redirect('/');
       } else {
         // ...or inserts the username with the salted and hashed password...
-        myDataBase.insertOne({ username: req.body.username, password: hash }, (err, doc) => {
-          if (err) {
-            res.redirect('/');
-          } else {
-            // ...then pass user down to passport.authenticate...
-            next(null, doc.ops[0]);
-          }
-        });
+        const doc = await myDataBase.insertOne({ username: req.body.username, password: hash });
+        // ...then passes user down to passport.authenticate...
+        next(null, doc.ops[0]);
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   },
   // ...which will call req.login (a function attached to the request which will call passport.serializeUser) or redirect to home page...
   passport.authenticate('local', { failureRedirect: '/' }),
