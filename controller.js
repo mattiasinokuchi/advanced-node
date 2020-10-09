@@ -12,5 +12,11 @@ module.exports = {
       showLogin: true,
       showRegistration: true
     });
-  }
+  },
+
+  // Handler for request to login
+  /*login: function(passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
+    // ...then redirects to profile page through ensureAuthenticated if successful
+    res.redirect('/profile');
+  });*/
 }

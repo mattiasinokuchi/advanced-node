@@ -33,16 +33,16 @@ app.set('view engine', 'pug');
 // Call FCC test
 fccTesting(app);
 
-// Enable middleware for static files
+// Enable middleware for static files (this middleware will be called for every call to the application)
 app.use('/public', express.static(process.cwd() + '/public'));
 
-// Enable middleware to parse request objects as JSON Object (inbuilt version of body-parser)
+// Enable middleware to parse request objects as JSON Object (this middleware will be called for every call to the application)
 app.use(express.json());
 
-// Enable middleware to parse request objects as strings or arrays
+// Enable middleware to parse request objects as strings or arrays (this middleware will be called for every call to the application)
 app.use(express.urlencoded({ extended: true }));
 
-// Enable middleware for session (to keeps users logged in)
+// Enable middleware for session (this middleware will be called for every call to the application)
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
@@ -53,12 +53,12 @@ app.use(session({
 // Import router object
 const router = require('./router')
 
-// Enable middlewares for authentication
+// Enable middlewares for authentication (these middlewares will be called for every call to the application)
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Connect app with database
-myDB(async (client) => {
+/*myDB(async (client) => {
   const myDataBase = await client.db('database').collection('users');
   routes(app, myDataBase);
   auth(app, myDataBase);
@@ -66,10 +66,10 @@ myDB(async (client) => {
   app.route('/').get((req, res) => {
     res.render('pug', { title: e, message: 'Unable to login' });
   });
-});
+});*/
 
-// Set up default path in router object
-//app.use('/', router);
+// Set up default path in router object (this middleware will be called for every call to the application)
+app.use('/', router);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port ' + process.env.PORT);
