@@ -5,7 +5,12 @@ module.exports = {
 
   // Handler for request to home page
   home: (req, res) => {
-    const user = req.session.user;
-    res.render("index", { user });
+    console.log('app.route("/")');
+    res.render('pug', {
+      title: 'Connected to Database',
+      message: 'Please login',
+      showLogin: true,
+      showRegistration: true
+    });
   }
 }
