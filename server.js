@@ -50,14 +50,6 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-<<<<<<< HEAD
-// Import router object
-//const router = require('./router')
-
-// Enable middlewares for authentication (these middlewares will be called for every call to the application)
-=======
-// Enable middlewares for authentication
->>>>>>> parent of 812e01b... added files for routes and handler
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -71,9 +63,6 @@ myDB(async (client) => {
     res.render('pug', { title: e, message: 'Unable to login' });
   });
 });
-
-// Set up default path in router object (this middleware will be called for every call to the application)
-//app.use('/', router);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port ' + process.env.PORT);
