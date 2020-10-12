@@ -4,15 +4,6 @@ const passport = require('passport');
 // Import module for hashing password
 const bcrypt = require('bcrypt');
 
-const { MongoClient } = require('mongodb');
-
-const URI = process.env.MONGO_URI; // Declare MONGO_URI in your .env file
-
-const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Connect to the MongoDB cluster
-client.connect();
-
 // Export module for routes
 module.exports = function (app, myDataBase) {
 
@@ -53,13 +44,13 @@ module.exports = function (app, myDataBase) {
       //...salts and hashes the password...
       const hash = bcrypt.hashSync(req.body.password, 12);
       // ...searches for the username in the database...
-      const user = await client.db('database').collection('users').findOne({ username: req.body.username });
+      const user = await myDataBase.findOne({ username: req.body.username });
       if (user) {
         // ...redirects back if username already is taken...
         res.redirect('/');
       } else {
         // ...or inserts the username with the salted and hashed password...
-        const doc = await client.db('database').collection('users').insertOne({ username: req.body.username, password: hash });
+        const doc = await myDataBase.insertOne({ username: req.body.username, password: hash });
         // ...then passes user object down to passport.authenticate...
         next(null, doc.ops[0]);
       }
