@@ -50,6 +50,7 @@ app.use(session({
   cookie: { secure: false }
 }));
 
+// Enable middleware for passport
 app.use(passport.initialize());
 app.use(passport.session());
 
