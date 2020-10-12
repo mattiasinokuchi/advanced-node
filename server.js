@@ -24,6 +24,9 @@ const routes = require('./routes.js')
 // Import module for authentication
 const auth = require('./auth.js')
 
+// Import router object
+const router = require('./routes')
+
 // Create an Express application
 const app = express();
 
@@ -50,12 +53,14 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-// Enable middleware for passport
+// Initialize passport
 app.use(passport.initialize());
+
+// Tell passport to use session
 app.use(passport.session());
 
 // Connect app with database
-myDB(async (client) => {
+/*myDB(async (client) => {
   const myDataBase = await client.db('database').collection('users');
   routes(app, myDataBase);
   auth(app, myDataBase);
@@ -63,7 +68,9 @@ myDB(async (client) => {
   app.route('/').get((req, res) => {
     res.render('pug', { title: e, message: 'Unable to login' });
   });
-});
+});*/
+
+app.use("/", router);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port ' + process.env.PORT);

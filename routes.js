@@ -1,11 +1,52 @@
+// Import web app framework
+const express = require('express');
+
+// Create an Express application
+const app = express();
+
 // Import authentication middleware
 const passport = require('passport');
 
 // Import module for hashing password
 const bcrypt = require('bcrypt');
 
+// Import module for handle requests
+const routes = require('./routes.js')
+
+// Import module for authentication
+const auth = require('./auth.js')
+
+// Import module for database connection
+const myDB = require('./connection');
+
+// Connect app with database
+myDB(async (client) => {
+  const myDataBase = await client.db('database').collection('users');
+  auth(app, myDataBase);
+}).catch((e) => {
+  app.route('/').get((req, res) => {
+    res.render('pug', { title: e, message: 'Unable to login' });
+  });
+});
+
+const { Router } = require("express");
+const router = Router();
+
+// Route for requests to home page
+router.get("/", function (req, res) {
+  console.log('app.route("/")');
+  res.render('pug', {
+    title: 'Connected to Database',
+    message: 'Please login',
+    showLogin: true,
+    showRegistration: true
+  });
+});
+
+module.exports = router;
+
 // Export module for routes
-module.exports = function (app, myDataBase) {
+/*module.exports = function (app, myDataBase) {
 
   // Route for requests to home page
   app.route('/').get((req, res) => {
@@ -16,10 +57,10 @@ module.exports = function (app, myDataBase) {
       showLogin: true,
       showRegistration: true
     });
-  });
+  });*/
 
   // Route for request to login passes user through passport.use...
-  app.route('/login').post(passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
+  /*app.route('/login').post(passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
     // ...then redirects to profile page through ensureAuthenticated if successful
     res.redirect('/profile');
   });
@@ -70,7 +111,7 @@ module.exports = function (app, myDataBase) {
   app.use((req, res, next) => {
     res.status(404).type('text').send('Not Found');
   });
-}
+}*/
 
 // Check if user is authenticated in the session...
 function ensureAuthenticated(req, res, next) {

@@ -1,3 +1,9 @@
+// Import web app framework
+const express = require('express');
+
+// Create an Express application
+const app = express();
+
 // Import authentication middleware
 const passport = require('passport');
 
@@ -9,6 +15,24 @@ const bcrypt = require('bcrypt');
 
 // Define constructor for user id
 const ObjectID = require('mongodb').ObjectID;
+
+// Import module for handle requests
+const routes = require('./routes.js')
+
+// Import module for authentication
+const auth = require('./auth.js')
+
+// Import module for database connection
+const myDB = require('./connection');
+
+// Connect app with database
+myDB(async (client) => {
+  const myDataBase = await client.db('database').collection('users');
+}).catch((e) => {
+  app.route('/').get((req, res) => {
+    res.render('pug', { title: e, message: 'Unable to login' });
+  });
+});
 
 // Export module for authentication
 module.exports = function (app, myDataBase) {
