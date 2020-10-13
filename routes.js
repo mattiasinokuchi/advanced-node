@@ -45,8 +45,7 @@ router.get("/", function (req, res) {
 
 // Route handler for request to login
 router.post("/login", passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
-  // ...then redirects to profile page through ensureAuthenticated if successful
-  console.log("/login=>");
+  console.log("/login =>");
   res.redirect('/profile');
 });
 
@@ -54,6 +53,13 @@ router.post("/login", passport.authenticate('local', { failureRedirect: '/' }), 
 router.get("/profile", ensureAuthenticated, (req, res) => {
   console.log("/profile");
   res.render('pug/profile', { username: req.user.username });
+});
+
+// Route handler for request to logout
+router.get('/logout', (req, res) => {
+  console.log("/logout =>");
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;
