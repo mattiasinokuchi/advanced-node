@@ -4,13 +4,8 @@ const passport = require('passport');
 // Import module for hashing password
 const bcrypt = require('bcrypt');
 
-const { MongoClient } = require('mongodb');
-
-const URI = process.env.MONGO_URI; // Declare MONGO_URI in your .env file
-
-const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
+// Import data model
+const client = require("./model");
 
 const { Router } = require("express");
 

@@ -10,13 +10,8 @@ const bcrypt = require('bcrypt');
 // Define constructor for user id
 const ObjectID = require('mongodb').ObjectID;
 
-const { MongoClient } = require('mongodb');
-
-const URI = process.env.MONGO_URI; // Declare MONGO_URI in your .env file
-
-const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
+// Import data model
+const client = require("./model");
 
 // Define how to authenticate someone locally (at login or register)...
 passport.use(new LocalStrategy(
