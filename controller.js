@@ -1,3 +1,8 @@
+// This file contains logic that updates data and view
+
+// Import data model
+const client = require("./model");
+
 // Make handlers available from routes.js
 module.exports = {
   // Handler for request to home page
