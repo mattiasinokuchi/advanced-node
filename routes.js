@@ -11,6 +11,9 @@ const { Router } = require("express");
 
 const router = Router();
 
+// Import controller
+const controller = require('./controller');
+
 // Route handler for requests to home page
 router.get("/", function (req, res) {
   console.log("/");
