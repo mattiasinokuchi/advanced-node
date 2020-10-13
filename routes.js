@@ -28,7 +28,7 @@ const auth = require('./auth.js')
 const myDB = require('./connection');
 
 // Connect app with database
-myDB(async (client) => {
+/*myDB(async (client) => {
   const myDataBase = await client.db('database').collection('users');
   console.log("connected to database");
   auth(app, myDataBase);
@@ -36,7 +36,7 @@ myDB(async (client) => {
   app.route('/').get((req, res) => {
     res.render('pug', { title: e, message: 'Unable to login' });
   });
-});
+});*/
 
 const { Router } = require("express");
 const router = Router();
