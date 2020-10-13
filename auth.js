@@ -34,13 +34,13 @@ const auth = require('./auth.js')
 const myDB = require('./connection');
 
 // Connect app with database
-myDB(async (client) => {
+/*myDB(async (client) => {
   const myDataBase = await client.db('database').collection('users');
 }).catch((e) => {
   app.route('/').get((req, res) => {
     res.render('pug', { title: e, message: 'Unable to login' });
   });
-});
+});*/
 
 // Export module for authentication
 //module.exports = function (app, myDataBase) {
