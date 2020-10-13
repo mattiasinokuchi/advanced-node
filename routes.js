@@ -32,15 +32,28 @@ myDB(async (client) => {
 const { Router } = require("express");
 const router = Router();
 
-// Route for requests to home page
+// Route handler for requests to home page
 router.get("/", function (req, res) {
-  console.log('app.route("/")');
+  console.log("/");
   res.render('pug', {
     title: 'Connected to Database',
     message: 'Please login',
     showLogin: true,
     showRegistration: true
   });
+});
+
+// Route handler for request to login
+router.post("/login", passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
+  // ...then redirects to profile page through ensureAuthenticated if successful
+  console.log("/login=>");
+  res.redirect('/profile');
+});
+
+// Route handler for request to profile page
+router.get("/profile", ensureAuthenticated, (req, res) => {
+  console.log("/profile");
+  res.render('pug/profile', { username: req.user.username });
 });
 
 module.exports = router;
