@@ -11,6 +11,8 @@ const { Router } = require("express");
 
 const router = Router();
 
+const UserModel = require("./model");
+
 // Import controller
 const controller = require('./controller');
 
@@ -57,15 +59,17 @@ router.post('/register',
       //...salts and hashes the password...
       const hash = bcrypt.hashSync(req.body.password, 12);
       // ...searches for the username in the database...
-      const user = await client.db('database').collection('users').findOne({ username: req.body.username });
+      //const user = await client.db('database').collection('users').findOne({ username: req.body.username });
+      const user = await UserModel.findOne({ username: req.body.username });
       if (user) {
         // ...redirects back if username already is taken...
         res.redirect('/');
       } else {
         // ...or inserts the username with the salted and hashed password...
-        const doc = await client.db('database').collection('users').insertOne({ username: req.body.username, password: hash });
+        //const doc = await client.db('database').collection('users').insertOne({ username: req.body.username, password: hash });
+        const doc = await UserModel.create({ username: req.body.username, password: hash });
         // ...then passes user object down to passport.authenticate...
-        next(null, doc.ops[0]);
+        next(null, doc[0]);
       }
     } catch (error) {
       console.log(error);

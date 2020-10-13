@@ -11,7 +11,8 @@ const bcrypt = require('bcrypt');
 const ObjectID = require('mongodb').ObjectID;
 
 // Import data model
-const client = require("./model");
+//const client = require("./model");
+const UserModel = require("./model");
 
 // Define how to authenticate someone locally (at login or register)...
 passport.use(new LocalStrategy(
@@ -19,7 +20,8 @@ passport.use(new LocalStrategy(
     // ...try to find the user in the database...
     try {
       console.log('passport.use =>');
-      await client.db('database').collection('users').findOne({ username: username }, function (err, user) {
+      //await client.db('database').collection('users').findOne({ username: username }, function (err, user) {
+      await UserModel.findOne({ username: username }, function (err, user) {
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
         // ...compare the passwords...
@@ -47,7 +49,8 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     console.log('passport.deserializeUser =>');
-    await client.db('database').collection('users').findOne({ _id: new ObjectID(id) }, (err, doc) => {
+    //await client.db('database').collection('users').findOne({ _id: new ObjectID(id) }, (err, doc) => {
+    await UserModel.findOne({ _id: new ObjectID(id) }, (err, doc) => {
       if (err) return console.error(err);
       // ...redirects to profile page through ensureAuthenticated (at register or login) or straight to the home page (at logout)
       done(null, doc);
