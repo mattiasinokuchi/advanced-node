@@ -6,9 +6,6 @@ require('dotenv').config();
 // Import web app framework
 const express = require('express');
 
-// Import module for database connection
-const myDB = require('./connection');
-
 // Import module for FCC tests
 const fccTesting = require('./freeCodeCamp/fcctesting.js');
 

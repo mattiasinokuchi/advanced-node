@@ -10,6 +10,8 @@
         "./server.js",
         "./auth.js",
         "./routes.js",
+        "./model.js",
+        "./controller.js",
         "./public/*"
     ],
     "env": {
