@@ -10,6 +10,14 @@ const passport = require('passport');
 // Import module for hashing password
 const bcrypt = require('bcrypt');
 
+const { MongoClient } = require('mongodb');
+
+const URI = process.env.MONGO_URI; // Declare MONGO_URI in your .env file
+
+const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+client.connect();
+
 // Import module for handle requests
 const routes = require('./routes.js')
 
@@ -22,6 +30,7 @@ const myDB = require('./connection');
 // Connect app with database
 myDB(async (client) => {
   const myDataBase = await client.db('database').collection('users');
+  console.log("connected to database");
   auth(app, myDataBase);
 }).catch((e) => {
   app.route('/').get((req, res) => {
@@ -60,6 +69,34 @@ router.get('/logout', (req, res) => {
   console.log("/logout =>");
   req.logout();
   res.redirect('/');
+});
+
+// Route handler for request to register...
+router.post('/register', async(req, res, next) => {
+  try {
+    //...salts and hashes the password...
+    const hash = bcrypt.hashSync(req.body.password, 12);
+    // ...searches for the username in the database...
+    const user = await client.db('database').collection('users').findOne({ username: req.body.username });
+    if (user) {
+      // ...redirects back if username already is taken...
+      res.redirect('/');
+    } else {
+      // ...or inserts the username with the salted and hashed password...
+      const doc = await client.db('database').collection('users').insertOne({ username: req.body.username, password: hash });
+      // ...then passes user object down to passport.authenticate...
+      next(null, doc.ops[0]);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+// ...which will call req.login (a function attached to the request which will call passport.serializeUser) or redirect to home page...
+passport.authenticate('local', { failureRedirect: '/' }),
+(req, res, next) => {
+  console.log('passport.authenticate =>');
+  // ...I'm back from passport.serializeUser and success!...now I will get passed through passport.deserializeUser and ensureAuthenicated before I'm redirected to the profile page
+  res.redirect('/profile');
 });
 
 module.exports = router;
