@@ -18,9 +18,6 @@ const session = require('express-session');
 // Import authentication middleware
 const passport = require('passport');
 
-// Import module for handle requests
-const routes = require('./routes.js')
-
 // Import module for authentication
 const auth = require('./auth.js')
 
@@ -58,17 +55,6 @@ app.use(passport.initialize());
 
 // Tell passport to use session
 app.use(passport.session());
-
-// Connect app with database
-/*myDB(async (client) => {
-  const myDataBase = await client.db('database').collection('users');
-  routes(app, myDataBase);
-  auth(app, myDataBase);
-}).catch((e) => {
-  app.route('/').get((req, res) => {
-    res.render('pug', { title: e, message: 'Unable to login' });
-  });
-});*/
 
 app.use("/", router);
 
