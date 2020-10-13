@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Define model (class) for MongoDB documents
-const UserModel = mongoose.model("UserModel", userSchema);
+const Users = mongoose.model("Users", userSchema);
 
 // Make model available for import
-module.exports = UserModel;
+module.exports = Users;
