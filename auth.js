@@ -52,11 +52,9 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     console.log('=> passport.deserializeUser =>');
-    await Users.findOne({ _id: new ObjectID(id) }, (err, doc) => {
-      if (err) return console.error(err);
+    const doc = await Users.findOne({ _id: new ObjectID(id) });
       // ...redirects to profile page through ensureAuthenticated (at register or login) or straight to the home page (at logout)
-      done(null, doc);
-    });
+    done(null, doc);
   } catch (error) {
     console.log(error);
   }
