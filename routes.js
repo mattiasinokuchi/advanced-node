@@ -17,7 +17,8 @@ const Users = require("./model");
 const controller = require('./controller');
 
 // Route handler for requests to home page
-router.get("/", function (req, res) {
+router.get("/", controller.home);
+/*router.get("/", function (req, res) {
   console.log("/");
   res.render('pug', {
     title: 'Connected to Database',
@@ -25,7 +26,7 @@ router.get("/", function (req, res) {
     showLogin: true,
     showRegistration: true
   });
-});
+});*/
 
 // Route handler for request to login
 router.post("/login",
