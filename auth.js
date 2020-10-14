@@ -1,35 +1,35 @@
+// This file contains logic for the authentication
+
 // Import authentication middleware
 const passport = require('passport');
 
-// Import module for authentication with local strategy (username and password)
+// Import module for authentication with username and password
 const LocalStrategy = require('passport-local');
 
-// Import module for comparing hashed passwords
+// Import module for comparing encrypted passwords
 const bcrypt = require('bcrypt');
 
 // Define constructor for user id
 const ObjectID = require('mongodb').ObjectID;
 
-// Import data model
+// Import database model
 const Users = require("./model");
 
-// Define how to authenticate someone locally (at login or register)...
+// Authentication (at login or register)...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
-    // ...try to find the user in the database...
     console.log('=> passport.use =>');
     try {
-      await Users.findOne({ username: username }, function (err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false); }
-        // ...compare the passwords...
-        if (!bcrypt.compareSync(password, user.password)) {
-          // ...don't pass if the password don't match...
-          return done(null, false);
-        }
-        // ...or pass the user through passport.serializeUser if the password match
-        return done(null, user);
-      });
+      // ...tries to find the user in the database...
+      const user = await Users.findOne({ username: username });
+      if (!user) { return done(null, false); }
+      // ...compare the passwords...
+      if (!bcrypt.compareSync(password, user.password)) {
+        // ...don't pass if the password don't match...
+        return done(null, false);
+      }
+      // ...or pass the user through passport.serializeUser if the password match
+      return done(null, user);
     } catch (error) {
       console.log(error);
     }
