@@ -19,7 +19,7 @@ const passport = require('passport');
 const auth = require('./auth.js')
 
 // Import router object
-const router = require('./routes')
+const router = require('./router')
 
 // Create an Express application
 const app = express();
