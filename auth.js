@@ -15,20 +15,25 @@ const ObjectID = require('mongodb').ObjectID;
 // Import database model
 const Users = require("./model");
 
-// Authentication (at login or register)...
+// Set up of authentication (at login or register)...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     console.log('=> passport.use =>');
     try {
       // ...tries to find the user in the database...
       const user = await Users.findOne({ username: username });
-      if (!user) { return done(null, false); }
-      // ...compare the passwords...
+      if (!user) {
+        console.log("=> user not found =>");
+        return done(null, false);
+      }
+      // ...compares the passwords...
       if (!bcrypt.compareSync(password, user.password)) {
+        console.log("=> password does not match =>");
         // ...don't pass if the password don't match...
         return done(null, false);
       }
       // ...or pass the user through passport.serializeUser if the password match
+      console.log("=> user found and password matches =>");
       return done(null, user);
     } catch (error) {
       console.log(error);
