@@ -17,7 +17,9 @@ const Users = require("./model");
 const controller = require('./controller');
 
 // Route handler for requests to home page
-router.get("/", controller.home);
+router.get("/",
+  controller.home
+);
 /*router.get("/", function (req, res) {
   console.log("/");
   res.render('pug', {
@@ -30,21 +32,30 @@ router.get("/", controller.home);
 
 // Route handler for request to login
 router.post("/login",
+  passport.authenticate('local',
+  { failureRedirect: '/' }),
+  controller.login
+);
+/*router.post("/login",
   passport.authenticate('local', { failureRedirect: '/' }),
   (req, res) => {
     console.log("/login =>");
     res.redirect('/profile');
   }
-);
+);*/
 
 // Route handler for request to profile page
 router.get("/profile",
+  ensureAuthenticated,
+  controller.profile
+);
+/*router.get("/profile",
   ensureAuthenticated,
   (req, res) => {
     console.log("/profile");
     res.render('pug/profile', { username: req.user.username });
   }
-);
+);*/
 
 // Route handler for request to logout
 router.get('/logout', (req, res) => {
