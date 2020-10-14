@@ -17,8 +17,8 @@ const Users = require("./model");
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     // ...try to find the user in the database...
+    console.log('=> passport.use =>');
     try {
-      console.log('passport.use =>');
       await Users.findOne({ username: username }, function (err, user) {
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
@@ -39,14 +39,14 @@ passport.use(new LocalStrategy(
 // Saves _id from the user object in the session (at register or login)...
 passport.serializeUser((user, done) => {
   // ...then passes back to passport.authenticate (at register) or goes to passport.deserializeUser (at login)...
-  console.log('passport.serializeUser =>');
+  console.log('=> passport.serializeUser =>');
   done(null, user._id);
 });
 
 // ...user object for _id saved in the session is attached to the request on every request (register, login or logout)...
 passport.deserializeUser(async (id, done) => {
   try {
-    console.log('passport.deserializeUser =>');
+    console.log('=> passport.deserializeUser =>');
     await Users.findOne({ _id: new ObjectID(id) }, (err, doc) => {
       if (err) return console.error(err);
       // ...redirects to profile page through ensureAuthenticated (at register or login) or straight to the home page (at logout)

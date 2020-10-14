@@ -11,7 +11,7 @@ module.exports = {
 
   // Route handler for request to home page
   home: (req, res) => {
-    console.log("/");
+    console.log("=> /");
     res.render('pug', {
       title: 'Connected to Database',
       message: 'Please login',
@@ -28,7 +28,7 @@ module.exports = {
 
   // Route handler for request to profile page
   profile: async (req, res) => {
-    console.log("/profile");
+    console.log("=> /profile");
     if (req.isAuthenticated()) {
       res.render('pug/profile', {
         username: req.user.username
@@ -49,6 +49,7 @@ module.exports = {
 
   // Route handler for request to register and then login...
   register: async(req, res, next) => {
+    console.log("/register =>");
     try {
       //...salts and hashes the password...
       const hash = bcrypt.hashSync(req.body.password, 12);
@@ -68,14 +69,3 @@ module.exports = {
     }
   }
 }
-
-// Check if user is authenticated in the session
-/*function ensureAuthenticated(req, res) {
-  console.log('ensureAuthenticated =>');
-  if (req.isAuthenticated()) {
-      return;
-  } else {
-    // Redirect unauthenticated users to home page
-    res.redirect('/');
-  }
-}*/
