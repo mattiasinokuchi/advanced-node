@@ -2,16 +2,16 @@
 const passport = require('passport');
 
 // Import module for hashing password
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 // Import data model
-const client = require("./model");
+//const client = require("./model");
 
 const { Router } = require("express");
 
 const router = Router();
 
-const Users = require("./model");
+//const Users = require("./model");
 
 // Import controller
 const controller = require('./controller');
@@ -58,14 +58,27 @@ router.get("/profile",
 );*/
 
 // Route handler for request to logout
-router.get('/logout', (req, res) => {
+router.get('/logout',
+  controller.logout
+);
+/*router.get('/logout', (req, res) => {
   console.log("/logout =>");
   req.logout();
   res.redirect('/');
-});
+});*/
 
 // Route handler for request to register and then login...
 router.post('/register',
+  controller.register,
+  // ...which will call req.login (a function attached to the request which will call passport.serializeUser) or redirect to home page...
+  passport.authenticate('local'),
+  (req, res, next) => {
+    console.log('passport.authenticate =>');
+    // ...I'm back from passport.serializeUser and success!...now I will get passed through passport.deserializeUser and ensureAuthenicated before I'm redirected to the profile page
+    res.redirect('/profile');
+  }
+);
+/*router.post('/register',
   async(req, res, next) => {
     try {
       //...salts and hashes the password...
@@ -92,7 +105,7 @@ router.post('/register',
     // ...I'm back from passport.serializeUser and success!...now I will get passed through passport.deserializeUser and ensureAuthenicated before I'm redirected to the profile page
     res.redirect('/profile');
   }
-);
+);*/
 
 module.exports = router;
 
