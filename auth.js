@@ -15,7 +15,7 @@ const ObjectID = require('mongodb').ObjectID;
 // Import database model
 const Users = require("./model");
 
-// Set up of authentication (at login or registration) which...
+// Set up of authentication (starts at login or registration) which...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     console.log('passport.use =>');
