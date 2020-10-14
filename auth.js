@@ -18,7 +18,7 @@ const Users = require("./model");
 // Set up of authentication (at login or registration) which...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
-    console.log('=> passport.use =>');
+    console.log('passport.use =>');
     try {
       // ...tries to find the user in the database...
       const user = await Users.findOne({ username: username });
@@ -42,7 +42,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// Set up of authentication which stores _id from the user object in the session (at login or registration)...
+// Set up of authentication to store _id from the user object in the session (at login or registration)...
 passport.serializeUser((user, done) => {
   // ...then passes back to passport.authenticate (at register) or goes to passport.deserializeUser (at login)...
   console.log('=> passport.serializeUser =>');
