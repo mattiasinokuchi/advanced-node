@@ -1,12 +1,12 @@
 // This file contains logic that updates data and view
 
-// Import module for hashing password
+// Import module for encryption of password
 const bcrypt = require('bcrypt');
 
 // Import data model
 const Users = require("./model");
 
-// Make handlers available from routes.js
+// Make handlers available from router.js
 module.exports = {
 
   // Route handler for request to home page
@@ -26,15 +26,16 @@ module.exports = {
     res.redirect('/profile');
   },
 
-  // Route handler for request to profile page
+  // Route handler for request to profile page...
   profile: async (req, res) => {
     console.log("=> /profile");
     if (req.isAuthenticated()) {
+      // ...render the page...
       res.render('pug/profile', {
         username: req.user.username
       });
     } else {
-      // Redirect unauthenticated users to home page
+      // ...or redirects unauthenticated requests to home page
       console.log("unauthenticated request to profile page");
       res.redirect('/');
     }
@@ -51,17 +52,17 @@ module.exports = {
   register: async(req, res, next) => {
     console.log("/register =>");
     try {
-      //...salts and hashes the password...
+      //...encrypts the password...
       const hash = bcrypt.hashSync(req.body.password, 12);
       // ...searches for the username in the database...
       const user = await Users.findOne({ username: req.body.username });
       if (user) {
-        // ...redirects back if username already is taken...
+        // ...redirects home if username is occupied...
         res.redirect('/');
       } else {
-        // ...or inserts the username with the salted and hashed password...
+        // ...or adds username and encrypted password in the database...
         const doc = await Users.create({ username: req.body.username, password: hash });
-        // ...then passes user object to passport.authenticate...
+        // ...then passes user object to passport.authenticate
         next(null, doc[0]);
       }
     } catch (error) {
