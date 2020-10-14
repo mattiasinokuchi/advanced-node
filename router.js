@@ -30,13 +30,11 @@ router.get('/logout',
   controller.logout
 );
 
-// Define route for request to register and login
+// Define route for request to register with login
 router.post('/register',
   controller.register,
   passport.authenticate('local'),
-  (req, res, next) => {
-    res.redirect('/profile');
-  }
+  controller.login
 );
 
 module.exports = router;
