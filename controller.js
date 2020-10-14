@@ -27,11 +27,17 @@ module.exports = {
   },
 
   // Route handler for request to profile page
-  profile: (req, res) => {
+  profile: async (req, res) => {
     console.log("/profile");
-    res.render('pug/profile', {
-      username: req.user.username
-    });
+    if (req.isAuthenticated()) {
+      res.render('pug/profile', {
+        username: req.user.username
+      });
+    } else {
+      // Redirect unauthenticated users to home page
+      console.log("unauthenticated request to profile page");
+      res.redirect('/');
+    }
   },
 
   // Route handler for request to logout
@@ -62,3 +68,14 @@ module.exports = {
     }
   }
 }
+
+// Check if user is authenticated in the session
+/*function ensureAuthenticated(req, res) {
+  console.log('ensureAuthenticated =>');
+  if (req.isAuthenticated()) {
+      return;
+  } else {
+    // Redirect unauthenticated users to home page
+    res.redirect('/');
+  }
+}*/

@@ -9,7 +9,7 @@
         "./views/pug/*",
         "./server.js",
         "./auth.js",
-        "./routes.js",
+        "./router.js",
         "./model.js",
         "./controller.js",
         "./public/*"

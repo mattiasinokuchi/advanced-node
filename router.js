@@ -22,7 +22,7 @@ router.post("/login",
 
 // Define route for request to profile page
 router.get("/profile",
-  ensureAuthenticated,
+//  ensureAuthenticated,
   controller.profile
 );
 
@@ -43,13 +43,13 @@ router.post('/register',
 
 module.exports = router;
 
-// Check if user is authenticated in the session...
-function ensureAuthenticated(req, res, next) {
+// Check if user is authenticated in the session
+/*function ensureAuthenticated(req, res, next) {
   console.log('ensureAuthenticated =>');
   if (req.isAuthenticated()) {
-    // ...and pass authenticated user to the profile page...
+    // Pass authenticated users to the profile page
     return next();
   }
-  // ...or redirects to home page if user is not
+  // Redirect other users to home page
   res.redirect('/');
-}
+}*/
