@@ -1,111 +1,45 @@
 // Import authentication middleware
 const passport = require('passport');
 
-// Import module for hashing password
-//const bcrypt = require('bcrypt');
-
-// Import data model
-//const client = require("./model");
-
 const { Router } = require("express");
 
 const router = Router();
 
-//const Users = require("./model");
-
 // Import controller
 const controller = require('./controller');
 
-// Route handler for requests to home page
+// Define route for requests to home page
 router.get("/",
   controller.home
 );
-/*router.get("/", function (req, res) {
-  console.log("/");
-  res.render('pug', {
-    title: 'Connected to Database',
-    message: 'Please login',
-    showLogin: true,
-    showRegistration: true
-  });
-});*/
 
-// Route handler for request to login
+// Define route for request to login
 router.post("/login",
   passport.authenticate('local',
   { failureRedirect: '/' }),
   controller.login
 );
-/*router.post("/login",
-  passport.authenticate('local', { failureRedirect: '/' }),
-  (req, res) => {
-    console.log("/login =>");
-    res.redirect('/profile');
-  }
-);*/
 
-// Route handler for request to profile page
+// Define route for request to profile page
 router.get("/profile",
   ensureAuthenticated,
   controller.profile
 );
-/*router.get("/profile",
-  ensureAuthenticated,
-  (req, res) => {
-    console.log("/profile");
-    res.render('pug/profile', { username: req.user.username });
-  }
-);*/
 
-// Route handler for request to logout
+// Define route for request to logout
 router.get('/logout',
   controller.logout
 );
-/*router.get('/logout', (req, res) => {
-  console.log("/logout =>");
-  req.logout();
-  res.redirect('/');
-});*/
 
-// Route handler for request to register and then login...
+// Define route for request to register and login
 router.post('/register',
   controller.register,
-  // ...which will call req.login (a function attached to the request which will call passport.serializeUser) or redirect to home page...
   passport.authenticate('local'),
   (req, res, next) => {
     console.log('passport.authenticate =>');
-    // ...I'm back from passport.serializeUser and success!...now I will get passed through passport.deserializeUser and ensureAuthenicated before I'm redirected to the profile page
     res.redirect('/profile');
   }
 );
-/*router.post('/register',
-  async(req, res, next) => {
-    try {
-      //...salts and hashes the password...
-      const hash = bcrypt.hashSync(req.body.password, 12);
-      // ...searches for the username in the database...
-      const user = await Users.findOne({ username: req.body.username });
-      if (user) {
-        // ...redirects back if username already is taken...
-        res.redirect('/');
-      } else {
-        // ...or inserts the username with the salted and hashed password...
-        const doc = await Users.create({ username: req.body.username, password: hash });
-        // ...then passes user object down to passport.authenticate...
-        next(null, doc[0]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  // ...which will call req.login (a function attached to the request which will call passport.serializeUser) or redirect to home page...
-  passport.authenticate('local'),
-  (req, res, next) => {
-    console.log('passport.authenticate =>');
-    // ...I'm back from passport.serializeUser and success!...now I will get passed through passport.deserializeUser and ensureAuthenicated before I'm redirected to the profile page
-    res.redirect('/profile');
-  }
-);*/
 
 module.exports = router;
 
