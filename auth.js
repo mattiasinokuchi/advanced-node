@@ -15,7 +15,7 @@ const ObjectID = require('mongodb').ObjectID;
 // Import database model
 const Users = require("./model");
 
-// Set up of authentication (at login or register)...
+// Set up of authentication (at login or registration) which...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     console.log('=> passport.use =>');
@@ -24,15 +24,16 @@ passport.use(new LocalStrategy(
       const user = await Users.findOne({ username: username });
       if (!user) {
         console.log("=> user not found =>");
+        // ...don't pass the request if username is missing...
         return done(null, false);
       }
-      // ...compares the passwords...
+      // ...or compares the passwords...
       if (!bcrypt.compareSync(password, user.password)) {
         console.log("=> password does not match =>");
-        // ...don't pass if the password don't match...
+        // ...don't pass the request if password does not match...
         return done(null, false);
       }
-      // ...or pass the user through passport.serializeUser if the password match
+      // ...or else passes the request to passport.serializeUser
       console.log("=> user found and password matches =>");
       return done(null, user);
     } catch (error) {
@@ -41,7 +42,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// Saves _id from the user object in the session (at register or login)...
+// Set up of authentication which stores _id from the user object in the session (at login or registration)...
 passport.serializeUser((user, done) => {
   // ...then passes back to passport.authenticate (at register) or goes to passport.deserializeUser (at login)...
   console.log('=> passport.serializeUser =>');
