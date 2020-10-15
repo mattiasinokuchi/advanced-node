@@ -55,7 +55,7 @@ passport.deserializeUser(async (id, done) => {
     console.log('=> passport.deserializeUser =>');
     // ...which gets all information of the user from the database using _id saved in the session...
     const doc = await Users.findOne({ _id: new ObjectID(id) });
-      // ...attaches it to the session and passes the request to the router (for profile page or logout)
+      // ...and passes it with the request to the router (for profile page or logout)
     done(null, doc);
   } catch (error) {
     console.log(error);
