@@ -41,10 +41,12 @@ module.exports = {
     }
   },
 
-  // Route handler for request to logout
+  // Route handler for request to logout...
   logout: (req, res) => {
     console.log("/logout =>");
+    // ...removes the req.user property (clears login session)...
     req.logout();
+    // ...and redirects to the home page
     res.redirect('/');
   },
 

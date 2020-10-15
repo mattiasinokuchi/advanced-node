@@ -15,7 +15,7 @@ const ObjectID = require('mongodb').ObjectID;
 // Import database model
 const Users = require("./model");
 
-// Set up of authentication (starts at login or registration) which...
+// Set up of authentication (starts at request to login or register) which...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     console.log('passport.use =>');
@@ -33,7 +33,7 @@ passport.use(new LocalStrategy(
         // ...don't pass the request if password does not match...
         return done(null, false);
       }
-      // ...or else passes the request to passport.serializeUser
+      // ...or pass the request to passport.serializeUser (if password matches)...
       console.log("=> user found and password matches =>");
       return done(null, user);
     } catch (error) {
@@ -42,19 +42,20 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// Set up of authentication to store _id from the user object in the session (at login or registration)...
+// ...which is a function...
 passport.serializeUser((user, done) => {
-  // ...then passes back to passport.authenticate (at register) or goes to passport.deserializeUser (at login)...
   console.log('=> passport.serializeUser =>');
+  // ...that attaches _id to the session and passes the request (to the login route)
   done(null, user._id);
 });
 
-// ...user object for _id saved in the session is attached to the request on every request (register, login or logout)...
+// Function called from the router (at login or logout)...
 passport.deserializeUser(async (id, done) => {
   try {
     console.log('=> passport.deserializeUser =>');
+    // ...which gets the user from the database using _id saved in the session...
     const doc = await Users.findOne({ _id: new ObjectID(id) });
-      // ...redirects to profile page through ensureAuthenticated (at register or login) or straight to the home page (at logout)
+      // ...attaches it to the session and passes the request to the router (for profile page or logout)
     done(null, doc);
   } catch (error) {
     console.log(error);
