@@ -42,7 +42,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// ...which is a function...
+// ...which is a function (called from passport.use)...
 passport.serializeUser((user, done) => {
   console.log('=> passport.serializeUser =>');
   // ...that attaches _id to the session and passes the request (to the login route)
@@ -53,7 +53,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     console.log('=> passport.deserializeUser =>');
-    // ...which gets the user from the database using _id saved in the session...
+    // ...which gets all information of the user from the database using _id saved in the session...
     const doc = await Users.findOne({ _id: new ObjectID(id) });
       // ...attaches it to the session and passes the request to the router (for profile page or logout)
     done(null, doc);
