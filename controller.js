@@ -22,7 +22,7 @@ module.exports = {
 
   // Route handler for request to login
   login: (req, res) => {
-    console.log("/login =>");
+    console.log("=> /login =>");
     res.redirect('/profile');
   },
 
@@ -59,6 +59,7 @@ module.exports = {
       // ...searches for the username in the database...
       const user = await Users.findOne({ username: req.body.username });
       if (user) {
+        console.log("=> username already exists =>");
         // ...redirects home if username is occupied...
         res.redirect('/');
       } else {

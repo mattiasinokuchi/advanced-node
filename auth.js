@@ -15,7 +15,7 @@ const ObjectID = require('mongodb').ObjectID;
 // Import database model
 const Users = require("./model");
 
-// Set up of authentication (starts at request to login or register) which...
+// Authentication (the start of a request to login or called by router at register)...
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     console.log('passport.use =>');
@@ -23,7 +23,7 @@ passport.use(new LocalStrategy(
       // ...tries to find the user in the database...
       const user = await Users.findOne({ username: username });
       if (!user) {
-        console.log("=> user not found =>");
+        console.log("=> username not found =>");
         // ...don't pass the request if username is missing...
         return done(null, false);
       }
@@ -33,8 +33,8 @@ passport.use(new LocalStrategy(
         // ...don't pass the request if password does not match...
         return done(null, false);
       }
-      // ...or pass the request to passport.serializeUser (if password matches)...
-      console.log("=> user found and password matches =>");
+      // ...or pass the request to passport.serializeUser (if password matches or succesful register)...
+      console.log("=> register successful or username found and password matches at login =>");
       return done(null, user);
     } catch (error) {
       console.log(error);
